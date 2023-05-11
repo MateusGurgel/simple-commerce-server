@@ -1,48 +1,45 @@
 import { test } from '@japa/runner'
 import { faker } from '@faker-js/faker'
+import User from 'App/Models/User'
 
-test.group('Users CRUD', () => {
-  let user = {
+function createRandomUser() {
+  return {
     name: faker.name.fullName(),
     email: faker.internet.email(),
     password: faker.internet.password(),
-    token: '',
-    id: '',
   }
+}
 
+test.group('Users CRUD', () => {
   test('Creating user', async ({ client }) => {
-    const response = await client.post('/users').form({
-      name: user.name,
-      email: user.email,
-      password: user.password,
-    })
+    const response = await client.post('/users').form(createRandomUser())
+
+    console.log(response.body())
 
     response.assertStatus(201)
-    response.assertBodyContains('id')
-
-    const responseBody = JSON.parse(response.text())
-    const id = responseBody.id
-    user.id = id
+    response.assertTextIncludes('id')
   })
 
   test('Loging in', async ({ client }) => {
+    const userData = createRandomUser()
+
+    await User.create(userData)
+
     const response = await client.post('/users/auth').form({
-      email: user.email,
-      password: user.password,
+      email: userData.email,
+      password: userData.password,
     })
 
-    response.assertBodyContains('token')
     response.assertStatus(200)
-
-    const responseBody = JSON.parse(response.text())
-    const token = responseBody.token
-    user.token = token
+    response.assertTextIncludes('token')
   })
 
   test('Deleting user', async ({ client }) => {
-    const response = await client
-      .delete(`/user/${user.id}`)
-      .header('Authorization', `Bearer ${user.token}`)
+    const userData = createRandomUser()
+
+    const user = await User.create(userData)
+
+    const response = await client.delete(`/users/${user.id}`).guard('api').loginAs(user)
 
     response.assertStatus(200)
   })
