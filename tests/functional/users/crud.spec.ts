@@ -14,8 +14,6 @@ test.group('Users CRUD', () => {
   test('Creating user', async ({ client }) => {
     const response = await client.post('/users').form(createRandomUser())
 
-    console.log(response.body())
-
     response.assertStatus(201)
     response.assertTextIncludes('id')
   })

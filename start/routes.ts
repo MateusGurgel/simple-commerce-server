@@ -21,3 +21,7 @@
 import Route from '@ioc:Adonis/Core/Route'
 
 Route.resource('products', 'ProductsController')
+
+Route.post('users', 'UsersController.store')
+Route.post('users/auth', 'UsersController.auth')
+Route.delete('users/:id', 'UsersController.destroy')
