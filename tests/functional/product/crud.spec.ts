@@ -13,10 +13,19 @@ test.group('Product crud', () => {
     response.assertTextIncludes('id')
   })
   test('List products', async ({ client }) => {
+    await Product.create(getRandomProductData())
     const response = await client.get('/products')
 
     response.assertStatus(200)
-    response.assertBodyContains('products')
+    response.assertBodyContains([])
+  })
+
+  test('Show product', async ({ client }) => {
+    const product = await Product.create(getRandomProductData())
+    const response = await client.get(`/products/${product.id}`)
+
+    response.assertStatus(200)
+    response.assertBodyContains('id')
   })
 
   test('Update product', async ({ client }) => {
