@@ -9,36 +9,46 @@ test.group('Product crud', () => {
     const user = await User.create(getRandomAdminData())
     const response = await client.post('/products').form(getRandomProductData()).loginAs(user)
 
+    const expectedResponse = user.serializeComputed()
+
     response.assertStatus(201)
-    response.assertTextIncludes('id')
+    response.assertBodyContains(expectedResponse)
   })
   test('List products', async ({ client }) => {
     await Product.create(getRandomProductData())
+
     const response = await client.get('/products')
 
+    const expectedResponse = Product.all()
+
     response.assertStatus(200)
-    response.assertBodyContains([])
+    response.assertBodyContains(expectedResponse)
   })
 
   test('Show product', async ({ client }) => {
     const product = await Product.create(getRandomProductData())
     const response = await client.get(`/products/${product.id}`)
 
+    const expectedResponse = product.serializeComputed()
+
     response.assertStatus(200)
-    response.assertBodyContains('id')
+    response.assertBodyContains(expectedResponse)
   })
 
   test('Update product', async ({ client }) => {
-    const product = await Product.create(getRandomProductData())
+    const oldProduct = await Product.create(getRandomProductData())
     const user = await User.create(getRandomAdminData())
 
     const response = await client
-      .patch(`/products/${product.id}`)
-      .form(getRandomAdminData())
+      .patch(`/products/${oldProduct.id}`)
+      .form(getRandomProductData())
       .loginAs(user)
 
+    const newProduct = await Product.findOrFail(oldProduct.id)
+    const expectedResponse = newProduct.serializeComputed()
+
     response.assertStatus(200)
-    response.assertBodyContains('id')
+    response.assertBodyContains(expectedResponse)
   })
 
   test('Deleting product', async ({ client, assert }) => {
