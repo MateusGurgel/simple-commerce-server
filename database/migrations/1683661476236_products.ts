@@ -9,7 +9,7 @@ export default class extends BaseSchema {
 
       table.string('name').notNullable()
       table.string('brand').notNullable()
-      table.string('categoty').notNullable()
+      table.string('category').notNullable()
       table.string('image').notNullable()
 
       table.integer('countInStock').notNullable()

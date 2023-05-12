@@ -15,13 +15,13 @@ export default class Product extends BaseModel {
   public image: string
 
   @column()
-  public countInStock: string
+  public countInStock: number
 
   @column()
   public brand: string
 
   @column()
-  public categoty: string
+  public category: string
 
   @column()
   public price: number
