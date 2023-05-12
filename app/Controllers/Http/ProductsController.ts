@@ -32,5 +32,13 @@ export default class ProductsController {
     return response.ok(product)
   }
 
-  public async destroy({}: HttpContextContract) {}
+  public async destroy({ params, response }: HttpContextContract) {
+    const { id } = params
+
+    const product = await Product.findOrFail(id)
+
+    const isDeleted = await product.delete()
+
+    return response.ok(isDeleted)
+  }
 }

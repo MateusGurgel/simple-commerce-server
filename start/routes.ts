@@ -24,7 +24,7 @@ Route.get('products', 'ProductsController.index')
 Route.post('products', 'ProductsController.store')
 Route.get('products/:id', 'ProductsController.show')
 Route.patch('products/:id', 'ProductsController.update')
-//Route.delete('products/:id', 'ProductsController.destroy')
+Route.delete('products/:id', 'ProductsController.destroy')
 
 Route.post('users', 'UsersController.store')
 Route.post('users/auth', 'UsersController.auth')
