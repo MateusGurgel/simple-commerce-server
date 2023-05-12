@@ -12,7 +12,7 @@ export default class extends BaseSchema {
       table.string('category').notNullable()
       table.string('image').notNullable()
 
-      table.integer('countInStock').notNullable()
+      table.integer('count_in_stock').notNullable()
       table.integer('price').notNullable()
       table.integer('rate').notNullable()
 
