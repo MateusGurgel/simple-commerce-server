@@ -14,7 +14,7 @@ export default class extends BaseSchema {
 
       table.integer('count_in_stock').notNullable()
       table.integer('price').notNullable()
-      table.integer('rate').notNullable()
+      table.integer('rate').defaultTo(0)
 
       table.text('description').notNullable()
 
