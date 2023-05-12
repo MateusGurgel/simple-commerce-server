@@ -22,7 +22,15 @@ export default class ProductsController {
     return response.created(product)
   }
 
-  public async update({}: HttpContextContract) {}
+  public async update({ request, response, params }: HttpContextContract) {
+    const { id } = params
+    const product = await Product.findOrFail(id)
+
+    const productData = await request.validate(CreateProductValidator)
+    product.merge(productData)
+
+    return response.ok(product)
+  }
 
   public async destroy({}: HttpContextContract) {}
 }

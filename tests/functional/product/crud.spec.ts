@@ -14,6 +14,7 @@ test.group('Product crud', () => {
     response.assertStatus(201)
     response.assertBodyContains(expectedResponse)
   })
+
   test('List products', async ({ client }) => {
     await Product.create(getRandomProductData())
 
