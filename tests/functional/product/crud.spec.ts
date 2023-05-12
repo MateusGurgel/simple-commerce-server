@@ -57,7 +57,9 @@ test.group('Product crud', () => {
     const user = await User.create(getRandomAdminData())
     const response = await client.delete(`/products/${product.id}`).loginAs(user)
 
-    assert.isTrue(product.$isDeleted)
+    const isDeleted = (await Product.find(product.id)) === null
+
+    assert.isTrue(isDeleted)
     response.assertStatus(200)
   })
 })
