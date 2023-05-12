@@ -11,6 +11,8 @@ export default class extends BaseSchema {
       table.string('email')
       table.string('user')
       table.string('password')
+
+      table.boolean('is_admin')
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */
