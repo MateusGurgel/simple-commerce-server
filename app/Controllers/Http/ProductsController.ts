@@ -17,7 +17,7 @@ export default class ProductsController {
 
   public async store({ request, response }: HttpContextContract) {
     const productData = await request.validate(CreateProductValidator)
-    const product = Product.create(productData)
+    const product = await Product.create(productData)
 
     return response.created(product)
   }
