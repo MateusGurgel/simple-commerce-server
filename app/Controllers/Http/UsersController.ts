@@ -4,12 +4,13 @@ import CreateUserValidator from 'App/Validators/CreateUserValidator'
 import LoginValidator from 'App/Validators/LoginValidator'
 
 export default class UsersController {
-  public async store({ request, response }: HttpContextContract) {
+  public async store({ request, response, auth }: HttpContextContract) {
     const userData = await request.validate(CreateUserValidator)
 
     const user = await User.create(userData)
+    const token = await auth.use('api').attempt(userData.email, userData.password)
 
-    return response.created(user)
+    return response.created({ ...user.serialize(), token: token.token })
   }
 
   public async auth({ response, request, auth }: HttpContextContract) {
