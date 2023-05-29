@@ -18,7 +18,8 @@ export default class UsersController {
 
     try {
       const token = await auth.use('api').attempt(userData.email, userData.password)
-      return token
+      const user = await User.findByOrFail('email', userData.email)
+      return response.ok({ ...user.serialize(), token: token.token })
     } catch {
       return response.unauthorized('Invalid credentials')
     }
