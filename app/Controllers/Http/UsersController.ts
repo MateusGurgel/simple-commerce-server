@@ -21,7 +21,7 @@ export default class UsersController {
       const user = await User.findByOrFail('email', userData.email)
       return response.ok({ ...user.serialize(), token: token.token })
     } catch {
-      return response.unauthorized('Invalid credentials')
+      return response.unauthorized({ errors: [{ message: 'Invalid credentials' }] })
     }
   }
 
