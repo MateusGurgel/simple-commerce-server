@@ -12,7 +12,7 @@ export default class extends BaseSchema {
       table.string('shipping_address')
 
       table
-        .enum('paymentMethod', Object.values(PaymentMethods))
+        .enum('payment_method', Object.values(PaymentMethods))
         .defaultTo(PaymentMethods.PAYPAL)
         .notNullable()
 

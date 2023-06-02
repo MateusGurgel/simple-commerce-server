@@ -29,3 +29,6 @@ Route.delete('products/:id', 'ProductsController.destroy')
 Route.post('users', 'UsersController.store')
 Route.post('users/auth', 'UsersController.auth')
 Route.delete('users/:id', 'UsersController.destroy')
+
+Route.get('orders', 'OrdersController.index')
+Route.post('orders', 'OrdersController.store')
