@@ -5,7 +5,10 @@ import CreateOrderValidator from 'App/Validators/CreateOrderValidator'
 
 export default class OrdersController {
   public async index({ response }: HttpContextContract) {
-    const orders = await Order.all()
+    const orders = await Order.query().preload('orderProduct', (orderProductQuery) => {
+      orderProductQuery.preload('product')
+    })
+
     response.ok(orders)
   }
 
@@ -16,8 +19,11 @@ export default class OrdersController {
       userId: 1,
       shippingAddress: OrderData.shippingAddress,
       paymentMethod: OrderData.paymentMethod,
-      totalPrice: 1200,
     })
+
+    //Adding all the Order products && calculating the cart value
+
+    let totalCartPrice = 0
 
     for (const orderProductData of OrderData.products) {
       try {
@@ -29,11 +35,17 @@ export default class OrdersController {
           quantity: orderProductData.quantity,
         })
 
-        orderProduct.related('product').save(product)
+        console.log('totalCartPrice')
+        totalCartPrice += product.price * parseInt(orderProduct.quantity.toString())
       } catch (error) {
+        console.log(error)
         // Invalida Product Error
       }
     }
+
+    //Getting the cart total Value
+    order.totalPrice = totalCartPrice
+    order.save()
 
     response.ok(order)
   }
