@@ -19,6 +19,7 @@ export default class OrdersController {
       userId: auth.user?.id,
       shippingAddress: OrderData.shippingAddress,
       paymentMethod: OrderData.paymentMethod,
+      isPaid: false,
     })
 
     //Adding all the Order products && calculating the cart value

@@ -9,6 +9,9 @@ export default class Order extends BaseModel {
   public id: number
 
   @column({})
+  public isPaid: boolean
+
+  @column({})
   public userId: number
 
   @column()

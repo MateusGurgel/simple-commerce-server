@@ -8,6 +8,7 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
 
+      table.boolean('is_paid')
       table.integer('user_id').unsigned().references('users.id').onDelete('CASCADE') //has one User
       table.string('shipping_address')
 
