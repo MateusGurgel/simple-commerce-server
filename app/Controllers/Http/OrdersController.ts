@@ -4,7 +4,9 @@ import Product from 'App/Models/Product'
 import CreateOrderValidator from 'App/Validators/CreateOrderValidator'
 
 export default class OrdersController {
-  public async index({ response }: HttpContextContract) {
+  public async index({ response, bouncer }: HttpContextContract) {
+    await bouncer.authorize('GetAllOrders')
+
     const orders = await Order.query().preload('orderProduct', (orderProductQuery) => {
       orderProductQuery.preload('product')
     })

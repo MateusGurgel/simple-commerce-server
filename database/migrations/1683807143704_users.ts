@@ -12,7 +12,7 @@ export default class extends BaseSchema {
       table.string('user')
       table.string('password')
 
-      table.boolean('is_admin')
+      table.boolean('is_admin').defaultTo(false)
 
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })

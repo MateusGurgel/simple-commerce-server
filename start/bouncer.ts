@@ -33,6 +33,8 @@ import User from 'App/Models/User'
 
 export const { actions } = Bouncer.define('deleteAccount', (user: User, deletedUser: User) => {
   return (user.isAdmin && !deletedUser.isAdmin) || user.id === deletedUser.id
+}).define('GetAllOrders', (user: User) => {
+  return !!user.isAdmin
 })
 
 /*
