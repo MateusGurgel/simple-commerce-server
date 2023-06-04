@@ -12,11 +12,11 @@ export default class OrdersController {
     response.ok(orders)
   }
 
-  public async store({ response, request }: HttpContextContract) {
+  public async store({ response, request, auth }: HttpContextContract) {
     const OrderData = await request.validate(CreateOrderValidator)
 
     const order = await Order.create({
-      userId: 1,
+      userId: auth.user?.id,
       shippingAddress: OrderData.shippingAddress,
       paymentMethod: OrderData.paymentMethod,
     })
