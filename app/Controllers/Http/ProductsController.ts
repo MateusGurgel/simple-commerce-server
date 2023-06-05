@@ -16,7 +16,7 @@ export default class ProductsController {
   }
 
   public async store({ request, response, bouncer }: HttpContextContract) {
-    await bouncer.authorize('CreateProduct')
+    await bouncer.authorize('Modifyproduct')
 
     const productData = await request.validate(CreateProductValidator)
     const product = await Product.create(productData)
@@ -24,7 +24,8 @@ export default class ProductsController {
     return response.created(product)
   }
 
-  public async update({ request, response, params }: HttpContextContract) {
+  public async update({ request, response, params, bouncer }: HttpContextContract) {
+    await bouncer.authorize('Modifyproduct')
     const { id } = params
     const product = await Product.findOrFail(id)
 
@@ -34,7 +35,8 @@ export default class ProductsController {
     return response.ok(product)
   }
 
-  public async destroy({ params, response }: HttpContextContract) {
+  public async destroy({ params, response, bouncer }: HttpContextContract) {
+    await bouncer.authorize('Modifyproduct')
     const { id } = params
 
     const product = await Product.findOrFail(id)
