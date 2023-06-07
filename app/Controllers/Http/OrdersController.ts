@@ -14,6 +14,18 @@ export default class OrdersController {
     response.ok(orders)
   }
 
+  public async myIndex({ response, auth }: HttpContextContract) {
+    const user = auth.user
+
+    if (!user) {
+      //return an error
+      return
+    }
+
+    const orders = await user.related('orders').query()
+
+    response.ok(orders)
+  }
   public async store({ response, request, auth }: HttpContextContract) {
     const OrderData = await request.validate(CreateOrderValidator)
 

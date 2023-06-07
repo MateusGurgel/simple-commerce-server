@@ -31,4 +31,5 @@ Route.post('users/auth', 'UsersController.auth')
 Route.delete('users/:id', 'UsersController.destroy').middleware('auth:api')
 
 Route.get('orders', 'OrdersController.index').middleware('auth:api')
+Route.get('myOrders', 'OrdersController.myIndex').middleware('auth:api')
 Route.post('orders', 'OrdersController.store').middleware('auth:api')
