@@ -26,6 +26,22 @@ export default class OrdersController {
 
     response.ok(orders)
   }
+
+  public async show({ params, auth }: HttpContextContract) {
+    const { id } = params
+
+    const user = auth.user
+
+    if (!user) {
+      //return an error
+      return
+    }
+
+    const order = await Order.findOrFail(id)
+
+    return order
+  }
+
   public async store({ response, request, auth }: HttpContextContract) {
     const OrderData = await request.validate(CreateOrderValidator)
 
