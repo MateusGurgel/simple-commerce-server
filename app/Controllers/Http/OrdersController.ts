@@ -39,6 +39,10 @@ export default class OrdersController {
 
     const order = await Order.findOrFail(id)
 
+    await order.load('orderProduct', (orderProductQuery) => {
+      orderProductQuery.preload('product')
+    })
+
     return order
   }
 
@@ -66,7 +70,6 @@ export default class OrdersController {
           quantity: orderProductData.quantity,
         })
 
-        console.log('totalCartPrice')
         totalCartPrice += product.price * parseInt(orderProduct.quantity.toString())
       } catch (error) {
         console.log(error)

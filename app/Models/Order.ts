@@ -1,5 +1,14 @@
 import { DateTime } from 'luxon'
-import { BaseModel, HasMany, HasOne, column, hasMany, hasOne } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel,
+  BelongsTo,
+  HasMany,
+  HasOne,
+  belongsTo,
+  column,
+  hasMany,
+  hasOne,
+} from '@ioc:Adonis/Lucid/Orm'
 import { PaymentMethods } from 'App/Enum/PaymentMethods'
 import OrderProduct from './OrderProduct'
 import User from './User'
@@ -32,6 +41,6 @@ export default class Order extends BaseModel {
   @hasMany(() => OrderProduct)
   public orderProduct: HasMany<typeof OrderProduct>
 
-  @hasOne(() => User)
-  public user: HasOne<typeof User>
+  @belongsTo(() => User)
+  public user: BelongsTo<typeof User>
 }
