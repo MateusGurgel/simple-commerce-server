@@ -27,6 +27,18 @@ export default class OrdersController {
     response.ok(orders)
   }
 
+  public async pay({ params }: HttpContextContract) {
+    const { id } = params
+
+    const order = await Order.findOrFail(id)
+
+    order.isPaid = true
+
+    await order.save()
+
+    return order
+  }
+
   public async show({ params, auth }: HttpContextContract) {
     const { id } = params
 
