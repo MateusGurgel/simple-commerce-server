@@ -1,14 +1,5 @@
 import { DateTime } from 'luxon'
-import {
-  BaseModel,
-  BelongsTo,
-  HasMany,
-  HasOne,
-  belongsTo,
-  column,
-  hasMany,
-  hasOne,
-} from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, HasMany, belongsTo, column, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import { PaymentMethods } from 'App/Enum/PaymentMethods'
 import OrderProduct from './OrderProduct'
 import User from './User'
