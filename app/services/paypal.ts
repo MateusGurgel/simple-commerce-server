@@ -18,6 +18,23 @@ export async function generateAccessToken() {
   return jsonData.access_token
 }
 
+// generate client token
+export async function generateClientToken() {
+  const accessToken = await generateAccessToken()
+  const response = await fetch(`${PAYPAL_API}/v1/identity/generate-token`, {
+    method: 'post',
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+      'Accept-Language': 'en_US',
+      'Content-Type': 'application/json',
+    },
+  })
+  console.log('response', response.status)
+  const jsonData = await handleResponse(response)
+  return jsonData.client_token
+}
+
+// call the create order method
 export async function createOrder(purchaseAmount: string) {
   const accessToken = await generateAccessToken()
   const url = `${PAYPAL_API}/v2/checkout/orders`
@@ -38,6 +55,21 @@ export async function createOrder(purchaseAmount: string) {
         },
       ],
     }),
+  })
+
+  return handleResponse(response)
+}
+
+// capture payment for an order
+export async function capturePayment(orderId) {
+  const accessToken = await generateAccessToken()
+  const url = `${PAYPAL_API}/v2/checkout/orders/${orderId}/capture`
+  const response = await fetch(url, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${accessToken}`,
+    },
   })
 
   return handleResponse(response)
