@@ -9,6 +9,9 @@ export default class Order extends BaseModel {
   public id: number
 
   @column({})
+  public paypalOrderId: string
+
+  @column({})
   public isPaid: boolean
 
   @column({})

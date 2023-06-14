@@ -2,6 +2,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Order from 'App/Models/Order'
 import Product from 'App/Models/Product'
 import CreateOrderValidator from 'App/Validators/CreateOrderValidator'
+import paypal from 'App/services/paypal'
 
 export default class OrdersController {
   public async index({ response, bouncer }: HttpContextContract) {
@@ -89,9 +90,19 @@ export default class OrdersController {
       }
     }
 
-    //Getting the cart total Value
+    //Setting the cart total Value
     order.totalPrice = totalCartPrice
+
+    //creating an order on Paypal API
+    const paypalOrder = await paypal.createOrder(totalCartPrice.toString())
+    order.paypalOrderId = paypalOrder.id
+
     order.save()
+
+    if (!paypalOrder.id) {
+      order.delete()
+      response.internalServerError()
+    }
 
     response.ok(order)
   }

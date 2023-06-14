@@ -51,3 +51,9 @@ async function handleResponse(response) {
   const errorMessage = await response.text()
   throw new Error(errorMessage)
 }
+
+const paypal = {
+  createOrder,
+}
+
+export default paypal
