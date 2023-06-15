@@ -29,7 +29,6 @@ export async function generateClientToken() {
       'Content-Type': 'application/json',
     },
   })
-  console.log('response', response.status)
   const jsonData = await handleResponse(response)
   return jsonData.client_token
 }
@@ -61,7 +60,7 @@ export async function createOrder(purchaseAmount: string) {
 }
 
 // capture payment for an order
-export async function capturePayment(orderId) {
+async function capturePayment(orderId) {
   const accessToken = await generateAccessToken()
   const url = `${PAYPAL_API}/v2/checkout/orders/${orderId}/capture`
   const response = await fetch(url, {
@@ -86,6 +85,8 @@ async function handleResponse(response) {
 
 const paypal = {
   createOrder,
+  capturePayment,
+  generateClientToken,
 }
 
 export default paypal

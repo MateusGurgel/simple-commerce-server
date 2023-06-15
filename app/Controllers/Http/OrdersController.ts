@@ -2,7 +2,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Order from 'App/Models/Order'
 import Product from 'App/Models/Product'
 import CreateOrderValidator from 'App/Validators/CreateOrderValidator'
-import paypal from 'App/services/paypal'
+import paypal from 'App/Services/paypal'
 
 export default class OrdersController {
   public async index({ response, bouncer }: HttpContextContract) {
@@ -28,12 +28,18 @@ export default class OrdersController {
     response.ok(orders)
   }
 
-  public async pay({ params }: HttpContextContract) {
+  public async pay({ params, response }: HttpContextContract) {
     const { id } = params
 
     const order = await Order.findOrFail(id)
 
-    order.isPaid = true
+    try {
+      const captureData = await paypal.capturePayment(order.paypalOrderId)
+      order.isPaid = true
+      response.status(200).json(captureData)
+    } catch (err) {
+      response.status(500).send(err.message)
+    }
 
     await order.save()
 
