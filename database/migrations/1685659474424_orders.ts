@@ -10,7 +10,7 @@ export default class extends BaseSchema {
       table.string('check_out_order_id')
 
       table.boolean('is_paid')
-      table.integer('user_id').unsigned().references('users.id').onDelete('CASCADE') //has one User
+      table.integer('user_id').unsigned().references('users.id').onDelete('CASCADE')
       table.string('shipping_address')
 
       table
