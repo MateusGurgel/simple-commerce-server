@@ -18,21 +18,6 @@ export async function generateAccessToken() {
   return jsonData.access_token
 }
 
-// generate client token
-export async function generateClientToken() {
-  const accessToken = await generateAccessToken()
-  const response = await fetch(`${PAYPAL_API}/v1/identity/generate-token`, {
-    method: 'post',
-    headers: {
-      'Authorization': `Bearer ${accessToken}`,
-      'Accept-Language': 'en_US',
-      'Content-Type': 'application/json',
-    },
-  })
-  const jsonData = await handleResponse(response)
-  return jsonData.client_token
-}
-
 // call the create order method
 export async function createOrder(purchaseAmount: string) {
   const accessToken = await generateAccessToken()
@@ -86,7 +71,6 @@ async function handleResponse(response) {
 const paypal = {
   createOrder,
   capturePayment,
-  generateClientToken,
 }
 
 export default paypal
