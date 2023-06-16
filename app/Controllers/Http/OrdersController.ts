@@ -28,24 +28,6 @@ export default class OrdersController {
     response.ok(orders)
   }
 
-  public async pay({ params, response }: HttpContextContract) {
-    const { id } = params
-
-    const order = await Order.findOrFail(id)
-
-    try {
-      const captureData = await paypal.capturePayment(order.paypalOrderId)
-      order.isPaid = true
-      response.status(200).json(captureData)
-    } catch (err) {
-      response.status(500).send(err.message)
-    }
-
-    await order.save()
-
-    return order
-  }
-
   public async show({ params, auth }: HttpContextContract) {
     const { id } = params
 
@@ -101,7 +83,7 @@ export default class OrdersController {
 
     //creating an order on Paypal API
     const paypalOrder = await paypal.createOrder(totalCartPrice.toString())
-    order.paypalOrderId = paypalOrder.id
+    order.checkOutOrderId = paypalOrder.id
 
     order.save()
 

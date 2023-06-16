@@ -33,7 +33,7 @@ export async function createOrder(purchaseAmount: string) {
       purchase_units: [
         {
           amount: {
-            currency_code: 'USD',
+            currency_code: 'BRL',
             value: purchaseAmount,
           },
         },
@@ -45,7 +45,7 @@ export async function createOrder(purchaseAmount: string) {
 }
 
 // capture payment for an order
-async function capturePayment(orderId) {
+async function capturePayment(orderId: string) {
   const accessToken = await generateAccessToken()
   const url = `${PAYPAL_API}/v2/checkout/orders/${orderId}/capture`
   const response = await fetch(url, {

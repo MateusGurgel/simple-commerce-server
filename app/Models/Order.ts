@@ -9,7 +9,7 @@ export default class Order extends BaseModel {
   public id: number
 
   @column({})
-  public paypalOrderId: string
+  public checkOutOrderId: string
 
   @column({})
   public isPaid: boolean

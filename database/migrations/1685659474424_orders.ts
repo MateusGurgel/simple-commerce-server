@@ -7,7 +7,7 @@ export default class extends BaseSchema {
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-      table.string('paypal_order_id')
+      table.string('check_out_order_id')
 
       table.boolean('is_paid')
       table.integer('user_id').unsigned().references('users.id').onDelete('CASCADE') //has one User
