@@ -3,6 +3,7 @@ import Order from 'App/Models/Order'
 import Product from 'App/Models/Product'
 import CreateOrderValidator from 'App/Validators/CreateOrderValidator'
 import paypal from 'App/Services/paypal'
+import ApiResponse from 'App/Utils/ApiResponse'
 
 export default class OrdersController {
   public async index({ response, bouncer }: HttpContextContract) {
@@ -19,8 +20,7 @@ export default class OrdersController {
     const user = auth.user
 
     if (!user) {
-      //return an error
-      return
+      return ApiResponse.error(response, 404, [{ message: 'User Not Found' }])
     }
 
     const orders = await user.related('orders').query()
@@ -28,14 +28,13 @@ export default class OrdersController {
     response.ok(orders)
   }
 
-  public async show({ params, auth }: HttpContextContract) {
+  public async show({ params, auth, response }: HttpContextContract) {
     const { id } = params
 
     const user = auth.user
 
     if (!user) {
-      //return an error
-      return
+      return ApiResponse.error(response, 404, [{ message: 'User Not Found' }])
     }
 
     const order = await Order.findOrFail(id)
@@ -73,8 +72,7 @@ export default class OrdersController {
 
         totalCartPrice += product.price * parseInt(orderProduct.quantity.toString())
       } catch (error) {
-        console.log(error)
-        // Invalida Product Error
+        return ApiResponse.error(response, 404, [{ message: 'Product not found' }])
       }
     }
 
