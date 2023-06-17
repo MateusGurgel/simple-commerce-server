@@ -1,5 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import User from 'App/Models/User'
+import ApiResponse from 'App/Utils/ApiResponse'
 import CreateUserValidator from 'App/Validators/CreateUserValidator'
 import LoginValidator from 'App/Validators/LoginValidator'
 
@@ -27,7 +28,12 @@ export default class UsersController {
 
   public async destroy({ params, response, bouncer }: HttpContextContract) {
     const { id } = params
-    const user = await User.findOrFail(id)
+
+    const user = await User.find(id)
+
+    if (!user) {
+      return ApiResponse.error(response, 404, [{ message: 'User not found' }])
+    }
 
     await bouncer.authorize('deleteAccount', user)
 
