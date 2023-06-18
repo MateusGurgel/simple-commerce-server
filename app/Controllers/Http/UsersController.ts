@@ -12,7 +12,13 @@ export default class UsersController {
   public async store({ request, response, auth }: HttpContextContract) {
     const userData = await request.validate(CreateUserValidator)
 
-    const user = await User.create({ ...userData, isAdmin: true })
+    const user = await User.create({ ...userData, isAdmin: false })
+
+    if (user.id === 1) {
+      user.isAdmin = true
+      user.save()
+    }
+
     const token = await auth.use('api').attempt(userData.email, userData.password)
 
     return response.created({ ...user.serialize(), token: token.token })
