@@ -6,6 +6,7 @@ Route.post('products', 'ProductsController.store').middleware('auth:api')
 Route.patch('products/:id', 'ProductsController.update').middleware('auth:api')
 Route.delete('products/:id', 'ProductsController.destroy').middleware('auth:api')
 
+Route.get('users', 'UsersController.index').middleware('auth:api')
 Route.post('users', 'UsersController.store')
 Route.post('users/auth', 'UsersController.auth')
 Route.delete('users/:id', 'UsersController.destroy').middleware('auth:api')

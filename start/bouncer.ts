@@ -40,6 +40,9 @@ export const { actions } = Bouncer.define('deleteAccount', (user: User, deletedU
   .define('Modifyproduct', (user: User) => {
     return !!user.isAdmin
   })
+  .define('ViewAllUsers', (user: User) => {
+    return !!user.isAdmin
+  })
 
 /*
 |--------------------------------------------------------------------------

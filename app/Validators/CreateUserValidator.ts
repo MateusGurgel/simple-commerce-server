@@ -27,8 +27,8 @@ export default class CreateUserValidator {
     name: schema.string([rules.minLength(5), rules.maxLength(228)]),
     email: schema.string([
       rules.email(),
-      rules.unique({ table: 'users', column: 'email' }),
       rules.normalizeEmail({ allLowercase: true }),
+      rules.unique({ table: 'users', column: 'email' }),
     ]),
     password: schema.string([rules.minLength(8), rules.maxLength(128)]),
   })
