@@ -23,6 +23,7 @@ export default class PaypalsController {
     try {
       const captureData = await paypal.capturePayment(paypalOrder.id)
       order.isPaid = true
+
       response.status(200).json(captureData)
     } catch (err) {
       return ApiResponse.error(response, 500, err.message)

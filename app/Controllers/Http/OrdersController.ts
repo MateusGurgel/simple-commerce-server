@@ -28,16 +28,22 @@ export default class OrdersController {
     response.ok(orders)
   }
 
-  public async show({ params, auth, response }: HttpContextContract) {
+  public async show({ params, auth, response, bouncer }: HttpContextContract) {
     const { id } = params
 
-    const user = auth.user
+    const order = await Order.find(id)
+    if (!order) {
+      return ApiResponse.error(response, 404, [{ message: 'Order Not Found' }])
+    }
 
+    const user = auth.user
     if (!user) {
       return ApiResponse.error(response, 404, [{ message: 'User Not Found' }])
     }
 
-    const order = await Order.findOrFail(id)
+    await order.load('user')
+
+    await bouncer.authorize('ViewOrder', order.user)
 
     await order.load('orderProduct', (orderProductQuery) => {
       orderProductQuery.preload('product')
