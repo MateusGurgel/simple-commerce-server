@@ -3,6 +3,7 @@ import Product from 'App/Models/Product'
 import ApiResponse from 'App/Utils/ApiResponse'
 import CreateProductValidator from 'App/Validators/CreateProductValidator'
 import UpdateProductValidator from 'App/Validators/UpdateProductValidator'
+import Drive from '@ioc:Adonis/Core/Drive'
 
 export default class ProductsController {
   public async index({ response }: HttpContextContract) {
@@ -34,7 +35,36 @@ export default class ProductsController {
     await bouncer.authorize('Modifyproduct')
 
     const { id } = params
-    const productData = await request.validate(UpdateProductValidator)
+    const data = await request.validate(UpdateProductValidator)
+
+    let productData: {
+      name?: string
+      description?: string
+      countInStock?: number
+      brand?: string
+      category?: string
+      price?: number
+      image?: string
+    } = {
+      name: data.name,
+      description: data.description,
+      countInStock: data.countInStock,
+      brand: data.brand,
+      category: data.category,
+      price: data.price,
+    }
+
+    if (data.image) {
+      await data.image.moveToDisk('./')
+
+      if (!data.image.fileName) {
+        return ApiResponse.error(response, 500, [{ message: 'File not found' }])
+      }
+
+      const imageUrl = await Drive.getUrl(data.image.fileName)
+      console.log(imageUrl)
+      productData = { ...productData, image: imageUrl }
+    }
 
     try {
       const product = await Product.findOrFail(id)
