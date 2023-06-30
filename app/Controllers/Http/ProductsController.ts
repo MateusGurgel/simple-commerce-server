@@ -25,7 +25,34 @@ export default class ProductsController {
   public async store({ request, response, bouncer }: HttpContextContract) {
     await bouncer.authorize('Modifyproduct')
 
-    const productData = await request.validate(CreateProductValidator)
+    const data = await request.validate(CreateProductValidator)
+
+    await data.image.moveToDisk('./')
+
+    if (!data.image.fileName) {
+      return ApiResponse.error(response, 500, [{ message: 'File not found' }])
+    }
+
+    const imageUrl = await Drive.getUrl(data.image.fileName)
+
+    let productData: {
+      name: string
+      description: string
+      countInStock: number
+      brand: string
+      category: string
+      price: number
+      image: string
+    } = {
+      name: data.name,
+      description: data.description,
+      countInStock: data.countInStock,
+      brand: data.brand,
+      category: data.category,
+      price: data.price,
+      image: imageUrl,
+    }
+
     const product = await Product.create(productData)
 
     return response.created(product)

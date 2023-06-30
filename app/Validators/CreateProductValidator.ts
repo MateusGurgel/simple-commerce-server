@@ -26,12 +26,12 @@ export default class CreateProductValidator {
   public schema = schema.create({
     name: schema.string([rules.minLength(5), rules.maxLength(228)]),
     description: schema.string([rules.minLength(1), rules.maxLength(1000)]),
-    image: schema.string([
-      rules.url({
-        protocols: ['http', 'https'],
-        allowedHosts: ['localhost'],
-      }),
-    ]),
+
+    image: schema.file({
+      size: '20 mb',
+      extnames: ['jpg', 'png'],
+    }),
+
     countInStock: schema.number([rules.range(0, 100000)]),
     brand: schema.string([rules.minLength(2), rules.maxLength(228)]),
     category: schema.string([rules.minLength(2), rules.maxLength(228)]),
