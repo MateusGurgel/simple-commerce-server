@@ -1,8 +1,18 @@
-import { BaseModel, BelongsTo, HasMany, belongsTo, column, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel,
+  BelongsTo,
+  HasMany,
+  HasOne,
+  belongsTo,
+  column,
+  hasMany,
+  hasOne,
+} from '@ioc:Adonis/Lucid/Orm'
 import { PaymentMethods } from 'App/Enum/PaymentMethods'
 import OrderProduct from './OrderProduct'
 import { DateTime } from 'luxon'
 import User from './User'
+import Review from './Review'
 
 export default class Order extends BaseModel {
   @column({ isPrimary: true })
@@ -12,10 +22,13 @@ export default class Order extends BaseModel {
   public checkOutOrderId: string
 
   @column({})
-  public isPaid: boolean
+  public userId: number
 
   @column({})
-  public userId: number
+  public reviewId: number
+
+  @column({})
+  public isPaid: boolean
 
   @column()
   public shippingAddress: String
@@ -31,6 +44,9 @@ export default class Order extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @hasOne(() => Review)
+  public review: HasOne<typeof Review>
 
   @hasMany(() => OrderProduct)
   public orderProduct: HasMany<typeof OrderProduct>

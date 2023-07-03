@@ -18,3 +18,5 @@ Route.get('myOrders', 'OrdersController.myIndex').middleware('auth:api')
 
 Route.get('api/paypal/config', 'PaypalController.getClientApiCredentials').middleware('auth:api')
 Route.post('api/paypal/capturePayment', 'PaypalController.captureOrder').middleware('auth:api')
+
+Route.post('reviews', 'ReviewsController.store').middleware('auth:api')
