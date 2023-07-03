@@ -33,7 +33,9 @@ export default class ReviewsController {
 
     //creating the review
 
-    const review = await orderProduct.related('review').create({ ...reviewData, userId: user.id })
+    const review = await orderProduct
+      .related('review')
+      .create({ ...reviewData, userId: user.id, userName: user.name })
 
     //update the product rate
 

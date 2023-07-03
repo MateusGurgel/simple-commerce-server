@@ -15,6 +15,12 @@ export default class Review extends BaseModel {
   public productId: Number
 
   @column()
+  public userName: String
+
+  @column()
+  public title: String
+
+  @column()
   public message: String
 
   @column()
