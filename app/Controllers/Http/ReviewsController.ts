@@ -1,5 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Order from 'App/Models/Order'
+import OrderProduct from 'App/Models/OrderProduct'
 import Review from 'App/Models/Review'
 import ApiResponse from 'App/Utils/ApiResponse'
 import CreateReviewValidator from 'App/Validators/CreateReviewValidator'
@@ -18,18 +18,34 @@ export default class ReviewsController {
       return ApiResponse.error(response, 404, [{ message: 'User not found' }])
     }
 
-    const order = await Order.find(reviewData.orderId)
+    const orderProduct = await OrderProduct.find(reviewData.orderProductId)
 
-    if (!order) {
+    if (!orderProduct) {
       return ApiResponse.error(response, 404, [{ message: 'Order not found' }])
     }
-    await order.load('review')
 
-    if (order.review) {
+    await orderProduct.load('review')
+    await orderProduct.load('product')
+
+    if (orderProduct.review) {
       return ApiResponse.error(response, 404, [{ message: 'The Order already has a review' }])
     }
 
-    const review = order.related('review').create({ ...reviewData, userId: user.id })
+    //creating the review
+
+    const review = await orderProduct.related('review').create({ ...reviewData, userId: user.id })
+
+    //update the product rate
+
+    const product = orderProduct.product
+    const reviews = await Review.query().where('product_id', orderProduct.productId.toString())
+
+    const sum: number = reviews.reduce((a, b) => a + b.rate, 0)
+    const rate = sum / reviews.length
+    product.rate = rate
+
+    product.save()
+
     return review
   }
 }

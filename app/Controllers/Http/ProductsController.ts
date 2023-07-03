@@ -15,6 +15,7 @@ export default class ProductsController {
     try {
       const { id } = params
       const product = await Product.findOrFail(id)
+      await product.load('reviews')
 
       return product
     } catch (error) {

@@ -6,7 +6,7 @@ export default class Review extends BaseModel {
   public id: number
 
   @column()
-  public orderId: Number
+  public orderProductId: Number
 
   @column()
   public userId: Number
@@ -18,7 +18,7 @@ export default class Review extends BaseModel {
   public message: String
 
   @column()
-  public rate: Number
+  public rate: number
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

@@ -8,7 +8,7 @@ export default class CreateReviewValidator {
     message: schema.string([rules.maxLength(1000), rules.minLength(1)]),
     rate: schema.number([rules.range(0, 5)]),
     productId: schema.number([rules.exists({ table: 'products', column: 'id' })]),
-    orderId: schema.number([rules.exists({ table: 'orders', column: 'id' })]),
+    orderProductId: schema.number([rules.exists({ table: 'order_products', column: 'id' })]),
   })
 
   public messages: CustomMessages = {}

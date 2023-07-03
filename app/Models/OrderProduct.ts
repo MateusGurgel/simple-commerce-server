@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, HasOne, belongsTo, column, hasOne } from '@ioc:Adonis/Lucid/Orm'
 import Product from './Product'
 import Order from './Order'
+import Review from './Review'
 
 export default class OrderProduct extends BaseModel {
   @column({ isPrimary: true })
@@ -27,4 +28,7 @@ export default class OrderProduct extends BaseModel {
 
   @hasOne(() => Order)
   public order: HasOne<typeof Order>
+
+  @hasOne(() => Review)
+  public review: HasOne<typeof Review>
 }
