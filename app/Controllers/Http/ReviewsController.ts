@@ -41,9 +41,14 @@ export default class ReviewsController {
 
     //update the product rate
 
-    const reviews = await Review.query().where('orderProductId', orderProduct.id.toString())
+    await product.load('orderProducts', (orderProductQuery) => {
+      orderProductQuery.preload('review')
+    })
+
+    const reviews = product.orderProducts.map((orderProduct) => orderProduct.review)
     if (reviews) {
       const sum: number = reviews.reduce((a, b) => a + b.rate, 0)
+      console.log(sum)
       const rate = sum / reviews.length
       product.rate = rate
       product.save()
