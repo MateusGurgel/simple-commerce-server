@@ -8,7 +8,6 @@ export default class extends BaseSchema {
       table.increments('id')
 
       table.integer('user_id').unsigned().references('Users.id').onDelete('CASCADE') //has one product
-      table.integer('product_id').unsigned().references('Products.id').onDelete('CASCADE') //has one product
       table.integer('order_product_id').unsigned().references('Orders.id').onDelete('CASCADE') //has one order
 
       table.string('user_name')

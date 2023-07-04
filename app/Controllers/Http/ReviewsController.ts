@@ -33,21 +33,22 @@ export default class ReviewsController {
 
     //creating the review
 
+    const product = orderProduct.product
+
     const review = await orderProduct
       .related('review')
       .create({ ...reviewData, userId: user.id, userName: user.name })
 
     //update the product rate
 
-    const product = orderProduct.product
-    const reviews = await Review.query().where('product_id', orderProduct.productId.toString())
+    const reviews = await Review.query().where('orderProductId', orderProduct.id.toString())
+    if (reviews) {
+      const sum: number = reviews.reduce((a, b) => a + b.rate, 0)
+      const rate = sum / reviews.length
+      product.rate = rate
+      product.save()
+    }
 
-    const sum: number = reviews.reduce((a, b) => a + b.rate, 0)
-    const rate = sum / reviews.length
-    product.rate = rate
-
-    product.save()
-
-    return review
+    return response.created(review)
   }
 }

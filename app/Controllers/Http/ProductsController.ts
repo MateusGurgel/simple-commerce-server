@@ -15,7 +15,14 @@ export default class ProductsController {
     try {
       const { id } = params
       const product = await Product.findOrFail(id)
-      await product.load('reviews')
+
+      await product.load('orderProducts')
+
+      for (let index = 0; index < product.orderProducts.length; index++) {
+        await product.orderProducts[index].load('review')
+      }
+
+      product.orderProducts
 
       return product
     } catch (error) {
@@ -90,7 +97,6 @@ export default class ProductsController {
       }
 
       const imageUrl = await Drive.getUrl(data.image.fileName)
-      console.log(imageUrl)
       productData = { ...productData, image: imageUrl }
     }
 

@@ -47,6 +47,7 @@ export default class OrdersController {
 
     await order.load('orderProduct', (orderProductQuery) => {
       orderProductQuery.preload('product')
+      orderProductQuery.preload('review')
     })
 
     return order
