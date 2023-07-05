@@ -1,6 +1,7 @@
 import Route from '@ioc:Adonis/Core/Route'
 
 Route.get('products', 'ProductsController.index')
+Route.get('products/search', 'ProductsController.search')
 Route.get('products/:id', 'ProductsController.show')
 Route.post('products', 'ProductsController.store').middleware('auth:api')
 Route.patch('products/:id', 'ProductsController.update').middleware('auth:api')

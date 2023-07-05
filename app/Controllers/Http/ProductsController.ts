@@ -11,6 +11,14 @@ export default class ProductsController {
     response.ok(products)
   }
 
+  public async search({ request }: HttpContextContract) {
+    const { query } = request.qs()
+
+    const products = await Product.query().whereLike('name', '%' + query + '%')
+
+    return products
+  }
+
   public async show({ params, response }: HttpContextContract) {
     try {
       const { id } = params
